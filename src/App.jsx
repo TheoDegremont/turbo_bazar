@@ -1,34 +1,56 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import { Canvas, useFrame, useLoader } from '@react-three/fiber'
+import { OrbitControls, useHelper, useGLTF } from '@react-three/drei'
+import * as THREE from 'three'
+import { Suspense, use, useRef } from 'react'
+import { KeyboardControls, useKeyboardControls } from '@react-three/drei'
+
+function McQueen() {
+  const model = useGLTF('/lightning_mcqueen_cars_3/scene.gltf')
+  return (
+    
+    <mesh position={[0, 0, 0]} scale={10}>
+      <ambientLight intensity={5} />
+      <primitive object={model.scene} />
+    </mesh>
+  )
+}
+
+function MysteryMachine() {
+  const model = useGLTF('/the_mystery_machine/scene.gltf')
+  return (
+    
+    <mesh position={[50, 0, 0]} scale={10}>
+      <ambientLight intensity={5} />
+      <primitive object={model.scene} />
+    </mesh>
+  )
+}
+
+function SoccerBall() {
+  const model = useGLTF('/soccer_ball/scene.gltf')
+  return (
+    
+    <mesh position={[25, 0, 0]} scale={10}>
+      <ambientLight intensity={5} />
+      <primitive object={model.scene} />
+    </mesh>
+  )
+}
+
+
+
 
 function App() {
-  const [count, setCount] = useState(0)
-
+  
   return (
-    <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
+    <Canvas camera={{ position: [0, 50, 50], fov: 75 }}>
+      <Suspense fallback={null}>
+        <McQueen />
+        <MysteryMachine />
+        <SoccerBall />
+        <OrbitControls enableDamping />
+      </Suspense>
+    </Canvas>
   )
 }
 

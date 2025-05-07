@@ -9,7 +9,6 @@ function McQueen() {
   return (
     
     <mesh position={[0, 0, 0]} scale={10}>
-      <ambientLight intensity={5} />
       <primitive object={model.scene} />
     </mesh>
   )
@@ -19,8 +18,7 @@ function MysteryMachine() {
   const model = useGLTF('/the_mystery_machine/scene.gltf')
   return (
     
-    <mesh position={[50, 0, 0]} scale={10}>
-      <ambientLight intensity={5} />
+    <mesh position={[50, 0, 50]} scale={10} rotation={[0, Math.PI / 2, 0]}>
       <primitive object={model.scene} />
     </mesh>
   )
@@ -31,7 +29,6 @@ function SoccerBall() {
   return (
     
     <mesh position={[25, 0, 0]} scale={10}>
-      <ambientLight intensity={5} />
       <primitive object={model.scene} />
     </mesh>
   )
@@ -44,6 +41,7 @@ function App() {
   
   return (
     <Canvas camera={{ position: [0, 50, 50], fov: 75 }}>
+      <ambientLight intensity={5} />
       <Suspense fallback={null}>
         <McQueen />
         <MysteryMachine />

@@ -66,13 +66,16 @@ function Walls() {
   const fieldWidth = 720
   const fieldLength = 1000
 
+  const texture = useLoader(THREE.TextureLoader, '/gradin.png')
+ // Ajuste selon ton image
+
   return (
     <>
       {/* Mur avant */}
       <RigidBody type="fixed">
         <mesh position={[0, wallHeight / 2, -fieldLength / 2]}>
           <boxGeometry args={[fieldWidth, wallHeight, wallThickness]} />
-          <meshStandardMaterial color="white" transparent opacity={0} />
+          <meshStandardMaterial map={texture}/>
         </mesh>
       </RigidBody>
 
@@ -80,7 +83,7 @@ function Walls() {
       <RigidBody type="fixed">
         <mesh position={[0, wallHeight / 2, fieldLength / 2]}>
           <boxGeometry args={[fieldWidth, wallHeight, wallThickness]} />
-          <meshStandardMaterial color="white" transparent opacity={0} />
+          <meshStandardMaterial map={texture} />
         </mesh>
       </RigidBody>
 
@@ -88,7 +91,7 @@ function Walls() {
       <RigidBody type="fixed">
         <mesh position={[-fieldWidth / 2, wallHeight / 2, 0]}>
           <boxGeometry args={[wallThickness, wallHeight, fieldLength]} />
-          <meshStandardMaterial color="white" transparent opacity={0} />
+          <meshStandardMaterial transparent opacity={0} />
         </mesh>
       </RigidBody>
 
@@ -96,12 +99,13 @@ function Walls() {
       <RigidBody type="fixed">
         <mesh position={[fieldWidth / 2, wallHeight / 2, 0]}>
           <boxGeometry args={[wallThickness, wallHeight, fieldLength]} />
-          <meshStandardMaterial color="white" transparent opacity={0} />
+          <meshStandardMaterial map={texture} />
         </mesh>
       </RigidBody>
     </>
   )
 }
+
 
 // Les buts
 function Goals() {

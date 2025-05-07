@@ -18,7 +18,7 @@ function McQueen() {
 
 // La Mystery Machine
 function MysteryMachine() {
-  const model = useGLTF('/the_mystery_machine/scene.gltf')
+  const model = useGLTF('/batmobile_jet_car_1989/scene.gltf')
 
   return (
     <RigidBody type="dynamic" colliders="trimesh" restitution={0.2} friction={1} mass={100}>

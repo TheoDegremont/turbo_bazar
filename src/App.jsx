@@ -19,6 +19,7 @@ function McQueen() {
 
   useFrame(() => {
     if (!rigidRef.current) return
+    const curVel = rigidRef.current.linvel();
   
     const speed = 100
     const rotationSpeed = 0.1
@@ -38,7 +39,7 @@ function McQueen() {
     // 💡 Appliquer la rotation correctement
     const quaternion = new THREE.Quaternion().setFromEuler(new THREE.Euler(0, rotationY, 0))
   
-    rigidRef.current.setLinvel({ x: direction[0], y: 0, z: direction[2] }, true)
+    rigidRef.current.setLinvel({ x: direction[0], y: curVel.y, z: direction[2] }, true)
     rigidRef.current.setRotation(quaternion, true)
   })
   return (
@@ -46,12 +47,13 @@ function McQueen() {
       ref={rigidRef}
       type="dynamic"
       colliders="trimesh"
-      restitution={0.2}
+      restitution={0.3}
       friction={1}
+      gravityScale={10}
       mass={100}
-      position={[10, 0, 0]}
+      position={[0, 0, -450]}
     >
-      <primitive object={model.scene} scale={10} />
+      <primitive object={model.scene} scale={20} />
     </RigidBody>
   )
 }
@@ -60,9 +62,10 @@ function McQueen() {
 
 
 function MysteryMachine() {
-  const model = useGLTF('/batmobile_jet_car_1989/scene.gltf')
+  const model = useGLTF('/mystery_machine_scooby-doo/scene.gltf')
   const rigidRef = useRef()
-  const [rotationY, setRotationY] = useState(0)
+  const [rotationY, setRotationY] = useState(Math.PI)
+
 
   const forward = useKeyboardControls(state => state.forward)
   const backward = useKeyboardControls(state => state.backward)
@@ -71,6 +74,7 @@ function MysteryMachine() {
 
   useFrame(() => {
     if (!rigidRef.current) return
+    const curVel = rigidRef.current.linvel();
 
     const speed = 100
     const rotationSpeed = 0.1
@@ -89,7 +93,7 @@ function MysteryMachine() {
 
     const quaternion = new THREE.Quaternion().setFromEuler(new THREE.Euler(0, rotationY, 0))
 
-    rigidRef.current.setLinvel({ x: direction[0], y: 0, z: direction[2] }, true)
+    rigidRef.current.setLinvel({ x: direction[0], y: curVel.y, z: direction[2] }, true)
     rigidRef.current.setRotation(quaternion, true)
   })
 
@@ -98,12 +102,13 @@ function MysteryMachine() {
       ref={rigidRef}
       type="dynamic"
       colliders="trimesh"
-      restitution={0.2}
+      restitution={0.3}
+      gravityScale={10}
       friction={1}
       mass={100}
-      position={[50, 0, 50]}
+      position={[0, 0, 450]}
     >
-      <primitive object={model.scene} scale={10} />
+      <primitive object={model.scene} scale={2} />
     </RigidBody>
   )
 }
@@ -116,8 +121,8 @@ function SoccerBall() {
   const model = useGLTF('/soccer_ball/scene.gltf')
   return (
 
-    <RigidBody type="dynamic" colliders="ball" restitution={0.6} friction={0.5} mass={10}>
-  <primitive object={model.scene} scale={10} position={[25, 10, 0]} />
+    <RigidBody type="dynamic" colliders="ball" restitution={0.6} friction={0.5} mass={10} gravityScale={10}>
+  <primitive object={model.scene} scale={15} position={[5, 30, 0]} />
 </RigidBody>
   )
 }
@@ -132,9 +137,9 @@ function Field() {
     texture.rotation = Math.PI / 2
 
     return (
-    <RigidBody type="fixed" restitution={0.2} friction={1}>
+    <RigidBody type="fixed"  friction={1}>
       <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, 0, 0]} receiveShadow>
-        <planeGeometry args={[720, 1060]} />
+        <planeGeometry args={[720, 1300]} />
         <meshStandardMaterial map={texture} />
       </mesh>
     </RigidBody>
@@ -149,7 +154,7 @@ function Walls() {
   const wallHeight = 600
   const wallThickness = 10
   const fieldWidth = 720
-  const fieldLength = 1000
+  const fieldLength = 1300
 
   const texture = useLoader(THREE.TextureLoader, '/gradin.png')
  // Ajuste selon ton image
@@ -157,7 +162,7 @@ function Walls() {
   return (
     <>
       {/* Mur avant */}
-      <RigidBody type="fixed">
+      <RigidBody type="fixed" restitution={1}>
         <mesh position={[0, wallHeight / 2, -fieldLength / 2]}>
           <boxGeometry args={[fieldWidth, wallHeight, wallThickness]} />
           <meshStandardMaterial map={texture}/>
@@ -165,7 +170,7 @@ function Walls() {
       </RigidBody>
 
       {/* Mur arrière */}
-      <RigidBody type="fixed">
+      <RigidBody type="fixed" restitution={1}>
         <mesh position={[0, wallHeight / 2, fieldLength / 2]}>
           <boxGeometry args={[fieldWidth, wallHeight, wallThickness]} />
           <meshStandardMaterial map={texture} />
@@ -173,7 +178,7 @@ function Walls() {
       </RigidBody>
 
       {/* Mur gauche */}
-      <RigidBody type="fixed">
+      <RigidBody type="fixed" restitution={1}>
         <mesh position={[-fieldWidth / 2, wallHeight / 2, 0]}>
           <boxGeometry args={[wallThickness, wallHeight, fieldLength]} />
           <meshStandardMaterial transparent opacity={0} />
@@ -181,7 +186,7 @@ function Walls() {
       </RigidBody>
 
       {/* Mur droit */}
-      <RigidBody type="fixed">
+      <RigidBody type="fixed" restitution={1}>
         <mesh position={[fieldWidth / 2, wallHeight / 2, 0]}>
           <boxGeometry args={[wallThickness, wallHeight, fieldLength]} />
           <meshStandardMaterial map={texture} />
@@ -193,9 +198,9 @@ function Walls() {
 
 
 function Goals() {
-    const goalWidth = 200
+    const goalWidth = 198
     const goalHeight = 80
-    const goalDepth = 50
+    const goalDepth = -150
     const postThickness = 5
 
     return (
@@ -236,10 +241,11 @@ function Goals() {
 
 function App() {
     return (
-        <Canvas camera={{ position: [0, 70, 70], fov: 75 }}>
+      <Canvas camera={{ position: [-650, 350, 0], fov: 80 }}>
+
             <ambientLight intensity={1.5} />
             <directionalLight position={[10, 10, 5]} intensity={2} castShadow />
-            <Physics gravity={[0, -15, 0]}>
+            <Physics>
             <Suspense fallback={null}>
                 <Field />
                 <Walls />

@@ -10,8 +10,8 @@ function McQueen() {
   const model = useGLTF('/lightning_mcqueen_cars_3/scene.gltf')
 
   return (
-    <RigidBody type="dynamic" colliders="trimesh" restitution={0.2} friction={1}>
-      <primitive object={model.scene} scale={10} position={[0, 10, 0]} />
+    <RigidBody type="dynamic" colliders="trimesh" restitution={0.2} friction={1} mass={100}>
+      <primitive object={model.scene} scale={10} position={[0, 10, 10]} />
     </RigidBody>
   )
 }
@@ -21,7 +21,7 @@ function MysteryMachine() {
   const model = useGLTF('/the_mystery_machine/scene.gltf')
 
   return (
-    <RigidBody type="dynamic" colliders="trimesh" restitution={0.2} friction={1}>
+    <RigidBody type="dynamic" colliders="trimesh" restitution={0.2} friction={1} mass={100}>
       <primitive object={model.scene} scale={10} position={[50, 10, 50]} rotation={[0, Math.PI / 2, 0]} />
     </RigidBody>
   )
@@ -32,12 +32,11 @@ function SoccerBall() {
   const model = useGLTF('/soccer_ball/scene.gltf')
 
   return (
-    <RigidBody type="dynamic" colliders="ball" restitution={0.6} friction={0.5}>
-      <primitive object={model.scene} scale={10} position={[25, 10, 0]} />
-    </RigidBody>
+    <RigidBody type="dynamic" colliders="ball" restitution={0.6} friction={0.5} mass={10}>
+  <primitive object={model.scene} scale={10} position={[25, 10, 0]} />
+</RigidBody>
   )
 }
-
 
 
 
@@ -156,7 +155,7 @@ function App() {
         <Canvas camera={{ position: [0, 70, 70], fov: 75 }}>
             <ambientLight intensity={1.5} />
             <directionalLight position={[10, 10, 5]} intensity={2} castShadow />
-            <Physics>
+            <Physics gravity={[0, -15, 0]}>
               <Suspense fallback={null}>
                   <Field />
                   <Walls />
